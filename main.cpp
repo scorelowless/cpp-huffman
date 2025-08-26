@@ -17,6 +17,12 @@ int main() {
     sort_by_value(freq_key_value);
     priority_queue<node*, vector<node*>, node_comparator> nodes = create_nodes(freq_key_value);
     node* tree = create_tree(nodes);
+    array<string, 256> translation = create_translation_dictionary(tree);
+
+    for (int i = 0; i < 256; i++) {
+        if (translation[i].empty()) continue;
+        cout << static_cast<char>(i) << ' ' << translation[i] << endl;
+    }
 
     return 0;
 }

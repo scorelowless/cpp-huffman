@@ -14,5 +14,6 @@ std::vector<std::pair<int, int>> convert_array_to_vector_of_pairs(std::array<int
 void sort_by_value(std::vector<std::pair<int, int>>&);
 std::priority_queue<node*, std::vector<node*>, node_comparator> create_nodes(const std::vector<std::pair<int, int>>&);
 node* create_tree(std::priority_queue<node*, std::vector<node*>, node_comparator>);
+std::array<std::string, 256> create_translation_dictionary(node*);
 
 #endif //CPP_HUFFMAN_FUNCTIONS_H

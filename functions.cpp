@@ -4,6 +4,7 @@
 #include "functions.h"
 
 #include <algorithm>
+#include <stack>
 
 #include "node_comparator.h"
 
@@ -57,4 +58,19 @@ node* create_tree(std::priority_queue<node*, std::vector<node*>, node_comparator
         nodes.emplace(n);
     }
     return nodes.top();
+}
+
+void dfs(node* n, const std::string &sequence, std::array<std::string, 256>& dictionary) {
+    if (n->get_left() == nullptr) { // leaf, letter
+        dictionary[n->get_c()] = sequence;
+        return;
+    }
+    dfs(n->get_left(), sequence + "0", dictionary);
+    dfs(n->get_right(), sequence + "1", dictionary);
+}
+
+std::array<std::string, 256> create_translation_dictionary(node* tree) {
+    std::array<std::string, 256> ret{};
+    dfs(tree, "", ret);
+    return ret;
 }
