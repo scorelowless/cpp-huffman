@@ -4,10 +4,20 @@
 #include "functions.h"
 
 #include <algorithm>
+#include <cstring>
 #include <stack>
 
 #include "compressed_string_builder.h"
 #include "node_comparator.h"
+
+int parse_input(int argc, char** argv, std::string &in_file, std::string &out_file, bool& compress) {
+    if (argc != 4) return 1;
+    if (strcmp(argv[1], "-c") != 0 && strcmp(argv[1], "-d") != 0) return 1;
+    in_file = argv[2];
+    out_file = argv[3];
+    compress = strcmp(argv[1], "-d");
+    return 0;
+}
 
 std::string get_file_content(const std::string &filename) {
     std::ifstream infile(filename);

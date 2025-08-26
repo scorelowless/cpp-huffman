@@ -8,6 +8,7 @@
 #include "node.h"
 #include "node_comparator.h"
 
+int parse_input(int argc, char** argv, std::string &in_file, std::string &out_file, bool&);
 std::string get_file_content(const std::string&);
 std::array<int, 256> get_char_frequency(const std::string&);
 std::vector<std::pair<int, int>> convert_array_to_vector_of_pairs(std::array<int, 256>&);
