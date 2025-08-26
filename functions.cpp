@@ -113,3 +113,8 @@ std::string concatenate(const std::vector<bool>& data, const std::vector<bool>& 
     const std::pair<std::string, int> ret = builder.build();
     return static_cast<char>(ret.second) + ret.first;
 }
+
+void save_to_file(const std::string &filename, const std::string &data) {
+    std::ofstream outfile(filename, std::ios::binary);
+    outfile.write(data.data(), static_cast<long>(data.size()));
+}

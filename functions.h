@@ -18,5 +18,6 @@ std::array<std::string, 256> create_translation_dictionary(node*);
 std::vector<bool> encode(const std::string&, const std::array<std::string, 256>&);
 std::vector<bool> serialize_tree(const node*);
 std::string concatenate(const std::vector<bool>&, const std::vector<bool>&);
+void save_to_file(const std::string&, const std::string&);
 
 #endif //CPP_HUFFMAN_FUNCTIONS_H
