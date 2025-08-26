@@ -5,4 +5,7 @@ set(CMAKE_CXX_STANDARD 14)
 
 add_executable(cpp_huffman
         main.cpp
-        functions.cpp)
+        functions.cpp
+        functions.h
+        node.cpp
+        node.h)
