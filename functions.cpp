@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <stack>
 
+#include "compressed_string_builder.h"
 #include "node_comparator.h"
 
 std::string get_file_content(const std::string &filename) {
@@ -73,4 +74,12 @@ std::array<std::string, 256> create_translation_dictionary(node* tree) {
     std::array<std::string, 256> ret{};
     dfs(tree, "", ret);
     return ret;
+}
+
+std::pair<std::string, int> encode(const std::string& s, const std::array<std::string, 256>& dictionary) {
+    compressed_string_builder sb;
+    for (const char i : s) {
+        sb.append(dictionary[i]);
+    }
+    return sb.build();
 }

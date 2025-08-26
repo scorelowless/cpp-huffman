@@ -10,4 +10,6 @@ add_executable(cpp_huffman
         node.cpp
         node.h
         node_comparator.cpp
-        node_comparator.h)
+        node_comparator.h
+        compressed_string_builder.cpp
+        compressed_string_builder.h)
