@@ -31,7 +31,3 @@ int node::get_weight() const {
 char node::get_c() const {
     return this->c;
 }
-
-bool node::operator<(const node &other) const {
-    return this->weight < other.weight;
-}

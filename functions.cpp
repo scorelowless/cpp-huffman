@@ -5,6 +5,8 @@
 
 #include <algorithm>
 
+#include "node_comparator.h"
+
 std::string get_file_content(const std::string &filename) {
     std::ifstream infile(filename);
     return {(std::istreambuf_iterator<char>(infile)),
@@ -35,10 +37,24 @@ void sort_by_value(std::vector<std::pair<int, int>>& V) {
         });
 }
 
-std::priority_queue<node> create_nodes(const std::vector<std::pair<int, int>>& V) {
-    std::priority_queue<node> nodes;
+std::priority_queue<node*, std::vector<node*>, node_comparator> create_nodes(
+    const std::vector<std::pair<int, int> > &V) {
+    std::priority_queue<node*, std::vector<node*>, node_comparator> nodes;
     for (const auto& i : V) {
-        nodes.emplace(static_cast<char>(i.first), i.second);
+        node* n = new node(static_cast<char>(i.first), i.second);
+        nodes.emplace(n);
     }
     return nodes;
+}
+
+node* create_tree(std::priority_queue<node*, std::vector<node*>, node_comparator> nodes) {
+    while (nodes.size() >= 2) {
+        node* n1 = nodes.top();
+        nodes.pop();
+        node* n2 = nodes.top();
+        nodes.pop();
+        node* n = new node(n1, n2);
+        nodes.emplace(n);
+    }
+    return nodes.top();
 }

@@ -17,7 +17,6 @@ public:
     node* get_left() const;
     node* get_right() const;
     char get_c() const;
-    bool operator<(const node& other) const;
 };
 
 

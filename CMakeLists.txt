@@ -8,4 +8,6 @@ add_executable(cpp_huffman
         functions.cpp
         functions.h
         node.cpp
-        node.h)
+        node.h
+        node_comparator.cpp
+        node_comparator.h)
