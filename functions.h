@@ -16,5 +16,6 @@ std::priority_queue<node*, std::vector<node*>, node_comparator> create_nodes(con
 node* create_tree(std::priority_queue<node*, std::vector<node*>, node_comparator>);
 std::array<std::string, 256> create_translation_dictionary(node*);
 std::pair<std::string, int> encode(const std::string&, const std::array<std::string, 256>&);
+std::vector<bool> serialize_tree(const node*);
 
 #endif //CPP_HUFFMAN_FUNCTIONS_H

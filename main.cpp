@@ -20,6 +20,12 @@ int main() {
     node* tree = create_tree(nodes);
     const array<string, 256> translation = create_translation_dictionary(tree);
     const pair<string, int> encoded_data = encode(content, translation);
+    const vector<bool> encoded_tree = serialize_tree(tree);
+
+    for (bool i : encoded_tree) {
+        cout << static_cast<char>(i + '0');
+    }
+    cout << endl << endl;
 
     for (int i = 0; i < 256; i++) {
         if (translation[i].empty()) continue;

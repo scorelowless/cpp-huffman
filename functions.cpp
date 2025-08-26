@@ -83,3 +83,23 @@ std::pair<std::string, int> encode(const std::string& s, const std::array<std::s
     }
     return sb.build();
 }
+
+void recursive_tree_serialization(const node* n, std::vector<bool>& data) {
+    if (n->get_left() == nullptr) { // leaf, letter
+        data.emplace_back(1);
+        for (int i = 7; i >= 0; i--) {
+            data.emplace_back(n->get_c() >> i & 1);
+        }
+        return;
+    }
+    data.emplace_back(0);
+    recursive_tree_serialization(n->get_left(), data);
+    recursive_tree_serialization(n->get_right(), data);
+
+}
+
+std::vector<bool> serialize_tree(const node* tree) {
+    std::vector<bool> ret{};
+    recursive_tree_serialization(tree, ret);
+    return ret;
+}
