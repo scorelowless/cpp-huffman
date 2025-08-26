@@ -1,3 +1,0 @@
-/home/marek/CLionProjects/cpp-huffman/cmake-build-debug/CMakeFiles/cpp_huffman.dir
-/home/marek/CLionProjects/cpp-huffman/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/marek/CLionProjects/cpp-huffman/cmake-build-debug/CMakeFiles/rebuild_cache.dir
