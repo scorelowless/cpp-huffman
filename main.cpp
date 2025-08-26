@@ -19,8 +19,9 @@ int main() {
     const priority_queue<node*, vector<node*>, node_comparator> nodes = create_nodes(freq_key_value);
     node* tree = create_tree(nodes);
     const array<string, 256> translation = create_translation_dictionary(tree);
-    const pair<string, int> encoded_data = encode(content, translation);
+    const vector<bool> encoded_data = encode(content, translation);
     const vector<bool> encoded_tree = serialize_tree(tree);
+    const string out_file_content = concatenate(encoded_data, encoded_tree);
 
     for (bool i : encoded_tree) {
         cout << static_cast<char>(i + '0');
@@ -31,6 +32,7 @@ int main() {
         if (translation[i].empty()) continue;
         cout << static_cast<char>(i) << ' ' << translation[i] << endl;
     }
-    cout << endl << encoded_data.second << endl << encoded_data.first << endl;
+    cout << out_file_content;
+
     return 0;
 }

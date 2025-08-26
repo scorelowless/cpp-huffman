@@ -15,7 +15,8 @@ void sort_by_value(std::vector<std::pair<int, int>>&);
 std::priority_queue<node*, std::vector<node*>, node_comparator> create_nodes(const std::vector<std::pair<int, int>>&);
 node* create_tree(std::priority_queue<node*, std::vector<node*>, node_comparator>);
 std::array<std::string, 256> create_translation_dictionary(node*);
-std::pair<std::string, int> encode(const std::string&, const std::array<std::string, 256>&);
+std::vector<bool> encode(const std::string&, const std::array<std::string, 256>&);
 std::vector<bool> serialize_tree(const node*);
+std::string concatenate(const std::vector<bool>&, const std::vector<bool>&);
 
 #endif //CPP_HUFFMAN_FUNCTIONS_H

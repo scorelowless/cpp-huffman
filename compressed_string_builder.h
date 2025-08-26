@@ -7,11 +7,11 @@
 class compressed_string_builder {
 private:
     std::string result_string;
-    std::string buffer;
+    std::vector<bool> buffer;
     void reduce();
 public:
     compressed_string_builder();
-    void append(const std::string&);
+    void append(const std::vector<bool>&);
     std::pair<std::string, int> build();
 };
 

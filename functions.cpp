@@ -76,12 +76,14 @@ std::array<std::string, 256> create_translation_dictionary(node* tree) {
     return ret;
 }
 
-std::pair<std::string, int> encode(const std::string& s, const std::array<std::string, 256>& dictionary) {
-    compressed_string_builder sb;
-    for (const char i : s) {
-        sb.append(dictionary[i]);
+std::vector<bool> encode(const std::string& s, const std::array<std::string, 256>& dictionary) {
+    std::vector<bool> ret{};
+    for (const char& i : s) {
+        for (const char& j : dictionary[i]) {
+            ret.push_back(j == '1');
+        }
     }
-    return sb.build();
+    return ret;
 }
 
 void recursive_tree_serialization(const node* n, std::vector<bool>& data) {
@@ -102,4 +104,12 @@ std::vector<bool> serialize_tree(const node* tree) {
     std::vector<bool> ret{};
     recursive_tree_serialization(tree, ret);
     return ret;
+}
+
+std::string concatenate(const std::vector<bool>& data, const std::vector<bool>& tree) {
+    compressed_string_builder builder;
+    builder.append(tree);
+    builder.append(data);
+    const std::pair<std::string, int> ret = builder.build();
+    return static_cast<char>(ret.second) + ret.first;
 }
