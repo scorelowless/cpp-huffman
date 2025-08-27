@@ -15,9 +15,9 @@ int main(int argc, char** argv){
         // insert frequencies into priority queue
         const priority_queue<node*, vector<node*>, node_comparator> nodes = create_nodes(freq);
         // create a Huffman tree based on frequencies
-        node* tree = create_tree(nodes);
+        const node* tree = create_tree(nodes);
         // create a translation dictionary - what sequence each char should be translated into
-        const array<string, 256> translation = create_translation_dictionary(tree);
+        const array<vector<bool>, 256> translation = create_translation_dictionary(tree);
         // translate all the contents of the file
         const vector<bool> encoded_data = encode(content, translation);
         // serialize the tree into bit sequence
