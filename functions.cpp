@@ -134,7 +134,7 @@ std::vector<bool> convert_string_to_vector(const std::string &data) {
     const int last_bits = static_cast<unsigned char>(data[0]);
     for (int i = 1; i < data.size() - 1; i++) {
         for (int j = 7; j >= 0; j--) {
-            ret.emplace_back(data[i] >> i & 1);
+            ret.emplace_back(data[i] >> j & 1);
         }
     }
     for (int i = 7; i >= 8 - last_bits; i--) {
