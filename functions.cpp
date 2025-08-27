@@ -1,20 +1,17 @@
 #include <fstream>
 #include <iterator>
 #include <string>
-#include "functions.h"
-
 #include <algorithm>
-#include <cstring>
-
+#include "functions.h"
 #include "compressed_string_builder.h"
 #include "node_comparator.h"
 
 int parse_input(int argc, char** argv, std::string &in_file, std::string &out_file, bool& compress) {
     if (argc != 4) return 1;
-    if (strcmp(argv[1], "-c") != 0 && strcmp(argv[1], "-d") != 0) return 1;
+    if (std::string(argv[1]) != "-c" && std::string(argv[1]) != "-d") return 1;
     in_file = argv[2];
     out_file = argv[3];
-    compress = strcmp(argv[1], "-d");
+    compress = std::string(argv[1]) != "-d";
     return 0;
 }
 
@@ -48,8 +45,7 @@ node* create_tree(std::priority_queue<node*, std::vector<node*>, node_comparator
         nodes.pop();
         node* n2 = nodes.top();
         nodes.pop();
-        node* n = new node(n1, n2);
-        nodes.emplace(n);
+        nodes.emplace(new node(n1, n2));
     }
     return nodes.top();
 }
