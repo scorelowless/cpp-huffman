@@ -7,10 +7,11 @@ private:
     node* left;
     node* right;
     int weight;
-    char c;
+    unsigned char c;
+
 public:
     node(node* left, node* right);
-    node(char c, int weight);
+    node(unsigned char c, int weight);
     ~node();
     int get_weight() const;
     node* get_left() const;

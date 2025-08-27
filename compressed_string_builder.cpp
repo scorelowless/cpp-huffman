@@ -18,14 +18,16 @@ void compressed_string_builder::append(const std::vector<bool>& add) {
     reduce();
 }
 
-std::pair<std::string, int> compressed_string_builder::build() {
+std::vector<unsigned char> compressed_string_builder::build() {
+    const unsigned char trailing_zeros = (8 - buffer.size()) % 8;
     if (!buffer.empty()) {
         unsigned char c = 0;
-        for (bool i : buffer) {
-            c = c << 1 | i;
+        for (const bool i : buffer) {
+            c = c << 1 | static_cast<unsigned char>(i);
         }
-        c <<= 8 - buffer.size();
-        result_string.push_back(static_cast<char>(c));
+        c <<= trailing_zeros;
+        result_string.emplace_back(c);
     }
-    return {result_string, buffer.size()};
+    result_string.insert(result_string.begin(), trailing_zeros);
+    return result_string;
 }

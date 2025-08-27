@@ -9,7 +9,7 @@ int main(int argc, char** argv){
     if (parse_input(argc, argv, in_file, out_file, compress)) return 1;
     if (compress) {
         // read the file contents
-        const string content = get_file_content(in_file);
+        const vector<unsigned char> content = get_file_content(in_file);
         // calculate the frequency of each char
         const array<int, 256> freq = get_char_frequency(content);
         // insert frequencies into priority queue
@@ -25,19 +25,19 @@ int main(int argc, char** argv){
         // free up the tree
         remove_tree(tree);
         // join the encoded contents of the file with encoded tree to form the whole output
-        const string out_file_content = concatenate(encoded_data, encoded_tree);
+        const vector<unsigned char> out_file_content = concatenate(encoded_data, encoded_tree);
         // save the output to the file
         save_to_file(out_file, out_file_content);
     }
     else {
         // read the file contents
-        const string content = get_file_content(in_file);
+        const vector<unsigned char> content = get_file_content(in_file);
         // change the format into bit sequence
-        const vector<bool> code = convert_string_to_vector(content);
+        const vector<bool> code = convert_unsigned_chars_to_bools(content);
         // divide the bit sequence into the tree part, serializing it, and into the encoded data part
         const pair<node*, vector<bool>> tree_and_code = deserialize_tree(code);
         // decode the encoded data according to the tree
-        const string data = decode(tree_and_code.first, tree_and_code.second);
+        const vector<unsigned char> data = decode(tree_and_code.first, tree_and_code.second);
         // free up the tree
         remove_tree(tree_and_code.first);
         // save decoded data into the file

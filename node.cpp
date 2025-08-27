@@ -7,7 +7,7 @@ node::node(node *left, node *right) {
     c = 0;
 }
 
-node::node(char c, int weight) {
+node::node(const unsigned char c, const int weight) {
     this->weight = weight;
     this->left = nullptr;
     this->right = nullptr;

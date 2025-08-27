@@ -13,15 +13,19 @@ int parse_input(int argc, char** argv, string &in_file, string &out_file, bool& 
     return 0;
 }
 
-string get_file_content(const string &filename) {
-    ifstream infile(filename);
-    return {(istreambuf_iterator<char>(infile)),
-                         istreambuf_iterator<char>()};
+vector<unsigned char> get_file_content(const string &filename) {
+    ifstream file(filename, ios::binary | ios::ate);
+    const auto size = file.tellg();
+    file.seekg(0);
+
+    vector<unsigned char> buffer(size);
+    file.read(reinterpret_cast<char*>(buffer.data()), size);
+    return buffer;
 }
 
-array<int, 256> get_char_frequency(const string& text) {
+array<int, 256> get_char_frequency(const vector<unsigned char>& data) {
     array<int, 256> ret{};
-    for (const char i : text) {
+    for (const unsigned char i : data) {
         ret[i]++;
     }
     return ret;
@@ -67,9 +71,9 @@ array<vector<bool>, 256> create_translation_dictionary(const node* tree) {
     return ret;
 }
 
-vector<bool> encode(const string& s, const array<vector<bool>, 256>& dictionary) {
+vector<bool> encode(const vector<unsigned char>& s, const array<vector<bool>, 256>& dictionary) {
     vector<bool> ret{};
-    for (const char& i : s) {
+    for (const unsigned char i : s) {
         ret.insert(ret.end(), dictionary[i].begin(), dictionary[i].end());
     }
     return ret;
@@ -104,28 +108,26 @@ void remove_tree(const node* n) {
 }
 
 
-string concatenate(const vector<bool>& data, const vector<bool>& tree) {
+vector<unsigned char> concatenate(const vector<bool>& data, const vector<bool>& tree) {
     compressed_string_builder builder;
     builder.append(tree);
     builder.append(data);
-    const pair<string, int> ret = builder.build();
-    return static_cast<char>(ret.second) + ret.first;
+    return builder.build();
 }
 
-void save_to_file(const string &filename, const string &data) {
+void save_to_file(const string &filename, const vector<unsigned char> &data) {
     ofstream outfile(filename, ios::binary);
-    outfile.write(data.data(), static_cast<long>(data.size()));
+    outfile.write(reinterpret_cast<const char*>(data.data()), static_cast<long>(data.size()));
 }
 
-vector<bool> convert_string_to_vector(const string &data) {
+vector<bool> convert_unsigned_chars_to_bools(const vector<unsigned char> &data) {
     vector<bool> ret{};
-    const int last_bits = static_cast<unsigned char>(data[0]);
     for (int i = 1; i < data.size() - 1; i++) {
         for (int j = 7; j >= 0; j--) {
             ret.emplace_back(data[i] >> j & 1);
         }
     }
-    for (int i = 7; i >= 8 - last_bits; i--) {
+    for (int i = 7; i >= data[0]; i--) {
         ret.emplace_back(data[data.size() - 1] >> i & 1);
     }
     return ret;
@@ -155,8 +157,8 @@ pair<node*, vector<bool>> deserialize_tree(const vector<bool>& data) {
     return {tree, vector<bool>(data.begin() + i, data.end())};
 }
 
-string decode(const node* n, const vector<bool>& data) {
-    string ret;
+vector<unsigned char> decode(const node* n, const vector<bool>& data) {
+    vector<unsigned char> ret;
     const node* current = n;
     for (const bool& i : data) {
         if (!i) {
@@ -166,7 +168,7 @@ string decode(const node* n, const vector<bool>& data) {
             current = current->get_right();
         }
         if (current->get_left() == nullptr) { // leaf, letter
-            ret += current->get_c();
+            ret.emplace_back(current->get_c());
             current = n;
         }
     }
