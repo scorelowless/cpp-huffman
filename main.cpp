@@ -22,6 +22,8 @@ int main(int argc, char** argv){
         const vector<bool> encoded_data = encode(content, translation);
         // serialize the tree into bit sequence
         const vector<bool> encoded_tree = serialize_tree(tree);
+        // free up the tree
+        remove_tree(tree);
         // join the encoded contents of the file with encoded tree to form the whole output
         const string out_file_content = concatenate(encoded_data, encoded_tree);
         // save the output to the file
@@ -35,7 +37,9 @@ int main(int argc, char** argv){
         // divide the bit sequence into the tree part, serializing it, and into the encoded data part
         const pair<node*, vector<bool>> tree_and_code = deserialize_tree(code);
         // decode the encoded data according to the tree
-        string data = decode(tree_and_code.first, tree_and_code.second);
+        const string data = decode(tree_and_code.first, tree_and_code.second);
+        // free up the tree
+        remove_tree(tree_and_code.first);
         // save decoded data into the file
         save_to_file(out_file, data);
     }

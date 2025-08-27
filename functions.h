@@ -14,6 +14,7 @@ node* create_tree(std::priority_queue<node*, std::vector<node*>, node_comparator
 std::array<std::string, 256> create_translation_dictionary(node*);
 std::vector<bool> encode(const std::string&, const std::array<std::string, 256>&);
 std::vector<bool> serialize_tree(const node*);
+void remove_tree(const node*);
 std::string concatenate(const std::vector<bool>&, const std::vector<bool>&);
 void save_to_file(const std::string&, const std::string&);
 std::vector<bool> convert_string_to_vector(const std::string&);

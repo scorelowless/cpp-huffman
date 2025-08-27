@@ -92,6 +92,15 @@ std::vector<bool> serialize_tree(const node* tree) {
     return ret;
 }
 
+void remove_tree(const node* n) {
+    if (n->get_left() != nullptr) {
+        remove_tree(n->get_left());
+        remove_tree(n->get_right());
+    }
+    delete n;
+}
+
+
 std::string concatenate(const std::vector<bool>& data, const std::vector<bool>& tree) {
     compressed_string_builder builder;
     builder.append(tree);
