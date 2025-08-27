@@ -166,3 +166,21 @@ std::pair<node*, std::vector<bool>> deserialize_tree(const std::vector<bool>& da
     node* tree = recursive_tree_deserialization(data, i);
     return {tree, std::vector<bool>(data.begin() + i, data.end())};
 }
+
+std::string decode(const node* n, const std::vector<bool>& data) {
+    std::string ret;
+    const node* current = n;
+    for (const bool& i : data) {
+        if (!i) {
+            current = current->get_left();
+        }
+        else {
+            current = current->get_right();
+        }
+        if (current->get_left() == nullptr) { // leaf, letter
+            ret += current->get_c();
+            current = n;
+        }
+    }
+    return ret;
+}
