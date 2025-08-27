@@ -128,3 +128,21 @@ void save_to_file(const std::string &filename, const std::string &data) {
     std::ofstream outfile(filename, std::ios::binary);
     outfile.write(data.data(), static_cast<long>(data.size()));
 }
+
+std::vector<bool> convert_string_to_vector(const std::string &data) {
+    std::vector<bool> ret{};
+    int last_bits = data[0];
+    for (int i = 1; i < data.size() - 1; i++) {
+        for (int j = 7; j >= 0; j--) {
+            ret.emplace_back(data[i] >> i & 1);
+        }
+    }
+    for (int i = 7; i >= 8 - last_bits; i--) {
+        ret.emplace_back(data[i] >> i & 1);
+    }
+    return ret;
+}
+
+std::pair<node*, std::string> deserialize_tree(const std::vector<bool>&) {
+    // TODO
+}

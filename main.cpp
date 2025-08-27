@@ -24,9 +24,11 @@ int main(int argc, char** argv){
         const vector<bool> encoded_tree = serialize_tree(tree);
         const string out_file_content = concatenate(encoded_data, encoded_tree);
         save_to_file(out_file, out_file_content);
-        return 0;
     }
     else {
-        // TODO
+        const string content = get_file_content(in_file);
+        const vector<bool> code = convert_string_to_vector(content);
+        const pair<node*, string> tree_and_code = deserialize_tree(content);
     }
+    return 0;
 }
