@@ -138,7 +138,7 @@ std::vector<bool> convert_string_to_vector(const std::string &data) {
         }
     }
     for (int i = 7; i >= 8 - last_bits; i--) {
-        ret.emplace_back(data[i] >> i & 1);
+        ret.emplace_back(data[data.size() - 1] >> i & 1);
     }
     return ret;
 }
