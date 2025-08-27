@@ -5,20 +5,21 @@
 #include <vector>
 
 #include "node_comparator.h"
+using namespace std;
 
-int parse_input(int argc, char** argv, std::string &in_file, std::string &out_file, bool&);
-std::string get_file_content(const std::string&);
-std::array<int, 256> get_char_frequency(const std::string&);
-std::priority_queue<node*, std::vector<node*>, node_comparator> create_nodes(const std::array<int, 256>&);
-node* create_tree(std::priority_queue<node*, std::vector<node*>, node_comparator>);
-std::array<std::vector<bool>, 256> create_translation_dictionary(const node*);
-std::vector<bool> encode(const std::string&, const std::array<std::vector<bool>, 256>&);
-std::vector<bool> serialize_tree(const node*);
+int parse_input(int argc, char** argv, string &in_file, string &out_file, bool&);
+string get_file_content(const string&);
+array<int, 256> get_char_frequency(const string&);
+priority_queue<node*, vector<node*>, node_comparator> create_nodes(const array<int, 256>&);
+node* create_tree(priority_queue<node*, vector<node*>, node_comparator>);
+array<vector<bool>, 256> create_translation_dictionary(const node*);
+vector<bool> encode(const string&, const array<vector<bool>, 256>&);
+vector<bool> serialize_tree(const node*);
 void remove_tree(const node*);
-std::string concatenate(const std::vector<bool>&, const std::vector<bool>&);
-void save_to_file(const std::string&, const std::string&);
-std::vector<bool> convert_string_to_vector(const std::string&);
-std::pair<node*, std::vector<bool>> deserialize_tree(const std::vector<bool>&);
-std::string decode(const node*, const std::vector<bool>&);
+string concatenate(const vector<bool>&, const vector<bool>&);
+void save_to_file(const string&, const string&);
+vector<bool> convert_string_to_vector(const string&);
+pair<node*, vector<bool>> deserialize_tree(const vector<bool>&);
+string decode(const node*, const vector<bool>&);
 
 #endif //CPP_HUFFMAN_FUNCTIONS_H

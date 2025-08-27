@@ -2,32 +2,33 @@
 
 #include "compressed_string_builder.h"
 #include "functions.h"
+using namespace std;
 
-int parse_input(int argc, char** argv, std::string &in_file, std::string &out_file, bool& compress) {
+int parse_input(int argc, char** argv, string &in_file, string &out_file, bool& compress) {
     if (argc != 4) return 1;
-    if (std::string(argv[1]) != "-c" && std::string(argv[1]) != "-d") return 1;
+    if (string(argv[1]) != "-c" && string(argv[1]) != "-d") return 1;
     in_file = argv[2];
     out_file = argv[3];
-    compress = std::string(argv[1]) != "-d";
+    compress = string(argv[1]) != "-d";
     return 0;
 }
 
-std::string get_file_content(const std::string &filename) {
-    std::ifstream infile(filename);
-    return {(std::istreambuf_iterator<char>(infile)),
-                         std::istreambuf_iterator<char>()};
+string get_file_content(const string &filename) {
+    ifstream infile(filename);
+    return {(istreambuf_iterator<char>(infile)),
+                         istreambuf_iterator<char>()};
 }
 
-std::array<int, 256> get_char_frequency(const std::string& text) {
-    std::array<int, 256> ret{};
+array<int, 256> get_char_frequency(const string& text) {
+    array<int, 256> ret{};
     for (const char i : text) {
         ret[i]++;
     }
     return ret;
 }
 
-std::priority_queue<node*, std::vector<node*>, node_comparator> create_nodes(const std::array<int, 256>& freq) {
-    std::priority_queue<node*, std::vector<node*>, node_comparator> nodes;
+priority_queue<node*, vector<node*>, node_comparator> create_nodes(const array<int, 256>& freq) {
+    priority_queue<node*, vector<node*>, node_comparator> nodes;
     for (int i = 0; i < 256; i++) {
         if (freq[i] == 0) continue;
         nodes.push(new node(static_cast<char>(i), freq[i]));
@@ -35,7 +36,7 @@ std::priority_queue<node*, std::vector<node*>, node_comparator> create_nodes(con
     return nodes;
 }
 
-node* create_tree(std::priority_queue<node*, std::vector<node*>, node_comparator> nodes) {
+node* create_tree(priority_queue<node*, vector<node*>, node_comparator> nodes) {
     while (nodes.size() >= 2) {
         node* n1 = nodes.top();
         nodes.pop();
@@ -46,35 +47,35 @@ node* create_tree(std::priority_queue<node*, std::vector<node*>, node_comparator
     return nodes.top();
 }
 
-void dfs(const node* n, const std::vector<bool> &sequence, std::array<std::vector<bool>, 256>& dictionary) {
+void dfs(const node* n, const vector<bool> &sequence, array<vector<bool>, 256>& dictionary) {
     if (n->get_left() == nullptr) { // leaf, letter
         dictionary[n->get_c()] = sequence;
         return;
     }
-    std::vector<bool> left = sequence;
+    vector<bool> left = sequence;
     left.emplace_back(0);
-    std::vector<bool> right = sequence;
+    vector<bool> right = sequence;
     right.emplace_back(1);
     dfs(n->get_left(), left, dictionary);
     dfs(n->get_right(), right, dictionary);
 }
 
-std::array<std::vector<bool>, 256> create_translation_dictionary(const node* tree) {
-    std::array<std::vector<bool>, 256> ret{};
-    const std::vector<bool> seq;
+array<vector<bool>, 256> create_translation_dictionary(const node* tree) {
+    array<vector<bool>, 256> ret{};
+    const vector<bool> seq;
     dfs(tree, seq, ret);
     return ret;
 }
 
-std::vector<bool> encode(const std::string& s, const std::array<std::vector<bool>, 256>& dictionary) {
-    std::vector<bool> ret{};
+vector<bool> encode(const string& s, const array<vector<bool>, 256>& dictionary) {
+    vector<bool> ret{};
     for (const char& i : s) {
         ret.insert(ret.end(), dictionary[i].begin(), dictionary[i].end());
     }
     return ret;
 }
 
-void recursive_tree_serialization(const node* n, std::vector<bool>& data) {
+void recursive_tree_serialization(const node* n, vector<bool>& data) {
     if (n->get_left() == nullptr) { // leaf, letter
         data.emplace_back(1);
         for (int i = 7; i >= 0; i--) {
@@ -88,8 +89,8 @@ void recursive_tree_serialization(const node* n, std::vector<bool>& data) {
 
 }
 
-std::vector<bool> serialize_tree(const node* tree) {
-    std::vector<bool> ret{};
+vector<bool> serialize_tree(const node* tree) {
+    vector<bool> ret{};
     recursive_tree_serialization(tree, ret);
     return ret;
 }
@@ -103,21 +104,21 @@ void remove_tree(const node* n) {
 }
 
 
-std::string concatenate(const std::vector<bool>& data, const std::vector<bool>& tree) {
+string concatenate(const vector<bool>& data, const vector<bool>& tree) {
     compressed_string_builder builder;
     builder.append(tree);
     builder.append(data);
-    const std::pair<std::string, int> ret = builder.build();
+    const pair<string, int> ret = builder.build();
     return static_cast<char>(ret.second) + ret.first;
 }
 
-void save_to_file(const std::string &filename, const std::string &data) {
-    std::ofstream outfile(filename, std::ios::binary);
+void save_to_file(const string &filename, const string &data) {
+    ofstream outfile(filename, ios::binary);
     outfile.write(data.data(), static_cast<long>(data.size()));
 }
 
-std::vector<bool> convert_string_to_vector(const std::string &data) {
-    std::vector<bool> ret{};
+vector<bool> convert_string_to_vector(const string &data) {
+    vector<bool> ret{};
     const int last_bits = static_cast<unsigned char>(data[0]);
     for (int i = 1; i < data.size() - 1; i++) {
         for (int j = 7; j >= 0; j--) {
@@ -130,7 +131,7 @@ std::vector<bool> convert_string_to_vector(const std::string &data) {
     return ret;
 }
 
-node* recursive_tree_deserialization(const std::vector<bool>& data, int& i) {
+node* recursive_tree_deserialization(const vector<bool>& data, int& i) {
     if (data[i] == 1) {
         i++;
         unsigned char c = 0;
@@ -148,14 +149,14 @@ node* recursive_tree_deserialization(const std::vector<bool>& data, int& i) {
     }
 }
 
-std::pair<node*, std::vector<bool>> deserialize_tree(const std::vector<bool>& data) {
+pair<node*, vector<bool>> deserialize_tree(const vector<bool>& data) {
     int i = 0;
     node* tree = recursive_tree_deserialization(data, i);
-    return {tree, std::vector<bool>(data.begin() + i, data.end())};
+    return {tree, vector<bool>(data.begin() + i, data.end())};
 }
 
-std::string decode(const node* n, const std::vector<bool>& data) {
-    std::string ret;
+string decode(const node* n, const vector<bool>& data) {
+    string ret;
     const node* current = n;
     for (const bool& i : data) {
         if (!i) {
