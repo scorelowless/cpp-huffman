@@ -16,13 +16,9 @@ int main(int argc, char** argv){
         // read the file contents
         const string content = get_file_content(in_file);
         // calculate the frequency of each char
-        array<int, 256> freq = get_char_frequency(content);
-        // change the format in which above-mentioned frequencies are stored
-        vector<pair<int, int>> freq_key_value = convert_array_to_vector_of_pairs(freq);
-        // sort the frequencies by the values
-        sort_by_value(freq_key_value);
+        const array<int, 256> freq = get_char_frequency(content);
         // insert frequencies into priority queue
-        const priority_queue<node*, vector<node*>, node_comparator> nodes = create_nodes(freq_key_value);
+        const priority_queue<node*, vector<node*>, node_comparator> nodes = create_nodes(freq);
         // create a Huffman tree based on frequencies
         node* tree = create_tree(nodes);
         // create a translation dictionary - what sequence each char should be translated into

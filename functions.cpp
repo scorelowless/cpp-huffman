@@ -5,7 +5,6 @@
 
 #include <algorithm>
 #include <cstring>
-#include <stack>
 
 #include "compressed_string_builder.h"
 #include "node_comparator.h"
@@ -33,28 +32,12 @@ std::array<int, 256> get_char_frequency(const std::string& text) {
     return ret;
 }
 
-std::vector<std::pair<int, int>> convert_array_to_vector_of_pairs(std::array<int, 256>& arr) {
-    std::vector<std::pair<int, int>> ret{};
-    for (int i = 0; i < 256; i++) {
-        if (arr[i] == 0) continue;
-        ret.emplace_back(i, arr[i]);
-    }
-    return ret;
-}
-
-void sort_by_value(std::vector<std::pair<int, int>>& V) {
-    sort(V.begin(), V.end(),
-        [](const std::pair<int, int>& a, const std::pair<int, int>& b) {
-            return a.second < b.second;
-        });
-}
-
 std::priority_queue<node*, std::vector<node*>, node_comparator> create_nodes(
-    const std::vector<std::pair<int, int> > &V) {
+    const std::array<int, 256>& freq) {
     std::priority_queue<node*, std::vector<node*>, node_comparator> nodes;
-    for (const auto& i : V) {
-        node* n = new node(static_cast<char>(i.first), i.second);
-        nodes.emplace(n);
+    for (int i = 0; i < 256; i++) {
+        if (freq[i] == 0) continue;
+        nodes.push(new node(static_cast<char>(i), freq[i]));
     }
     return nodes;
 }
