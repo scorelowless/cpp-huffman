@@ -26,8 +26,7 @@ std::array<int, 256> get_char_frequency(const std::string& text) {
     return ret;
 }
 
-std::priority_queue<node*, std::vector<node*>, node_comparator> create_nodes(
-    const std::array<int, 256>& freq) {
+std::priority_queue<node*, std::vector<node*>, node_comparator> create_nodes(const std::array<int, 256>& freq) {
     std::priority_queue<node*, std::vector<node*>, node_comparator> nodes;
     for (int i = 0; i < 256; i++) {
         if (freq[i] == 0) continue;
@@ -47,27 +46,30 @@ node* create_tree(std::priority_queue<node*, std::vector<node*>, node_comparator
     return nodes.top();
 }
 
-void dfs(const node* n, const std::string &sequence, std::array<std::string, 256>& dictionary) {
+void dfs(const node* n, const std::vector<bool> &sequence, std::array<std::vector<bool>, 256>& dictionary) {
     if (n->get_left() == nullptr) { // leaf, letter
         dictionary[n->get_c()] = sequence;
         return;
     }
-    dfs(n->get_left(), sequence + "0", dictionary);
-    dfs(n->get_right(), sequence + "1", dictionary);
+    std::vector<bool> left = sequence;
+    left.emplace_back(0);
+    std::vector<bool> right = sequence;
+    right.emplace_back(1);
+    dfs(n->get_left(), left, dictionary);
+    dfs(n->get_right(), right, dictionary);
 }
 
-std::array<std::string, 256> create_translation_dictionary(const node* tree) {
-    std::array<std::string, 256> ret{};
-    dfs(tree, "", ret);
+std::array<std::vector<bool>, 256> create_translation_dictionary(const node* tree) {
+    std::array<std::vector<bool>, 256> ret{};
+    const std::vector<bool> seq;
+    dfs(tree, seq, ret);
     return ret;
 }
 
-std::vector<bool> encode(const std::string& s, const std::array<std::string, 256>& dictionary) {
+std::vector<bool> encode(const std::string& s, const std::array<std::vector<bool>, 256>& dictionary) {
     std::vector<bool> ret{};
     for (const char& i : s) {
-        for (const char& j : dictionary[i]) {
-            ret.push_back(j == '1');
-        }
+        ret.insert(ret.end(), dictionary[i].begin(), dictionary[i].end());
     }
     return ret;
 }
