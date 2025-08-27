@@ -7,7 +7,7 @@ void compressed_string_builder::reduce() {
             c = c << 1 | buffer[i];
         }
         buffer.erase(buffer.begin(), buffer.begin() + 8);
-        result_string.push_back(static_cast<char>(c)); // can I do that?
+        result_string.push_back(static_cast<char>(c));
     }
 }
 

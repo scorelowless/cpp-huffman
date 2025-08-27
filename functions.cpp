@@ -1,10 +1,7 @@
 #include <fstream>
-#include <iterator>
-#include <string>
-#include <algorithm>
-#include "functions.h"
+
 #include "compressed_string_builder.h"
-#include "node_comparator.h"
+#include "functions.h"
 
 int parse_input(int argc, char** argv, std::string &in_file, std::string &out_file, bool& compress) {
     if (argc != 4) return 1;
@@ -50,7 +47,7 @@ node* create_tree(std::priority_queue<node*, std::vector<node*>, node_comparator
     return nodes.top();
 }
 
-void dfs(node* n, const std::string &sequence, std::array<std::string, 256>& dictionary) {
+void dfs(const node* n, const std::string &sequence, std::array<std::string, 256>& dictionary) {
     if (n->get_left() == nullptr) { // leaf, letter
         dictionary[n->get_c()] = sequence;
         return;

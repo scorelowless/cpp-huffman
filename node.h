@@ -1,4 +1,3 @@
-
 #ifndef CPP_HUFFMAN_NODE_H
 #define CPP_HUFFMAN_NODE_H
 

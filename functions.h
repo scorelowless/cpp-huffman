@@ -2,10 +2,8 @@
 #define CPP_HUFFMAN_FUNCTIONS_H
 #include <array>
 #include <queue>
-#include <queue>
 #include <vector>
 
-#include "node.h"
 #include "node_comparator.h"
 
 int parse_input(int argc, char** argv, std::string &in_file, std::string &out_file, bool&);
