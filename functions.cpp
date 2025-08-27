@@ -131,7 +131,7 @@ void save_to_file(const std::string &filename, const std::string &data) {
 
 std::vector<bool> convert_string_to_vector(const std::string &data) {
     std::vector<bool> ret{};
-    int last_bits = data[0];
+    const int last_bits = static_cast<unsigned char>(data[0]);
     for (int i = 1; i < data.size() - 1; i++) {
         for (int j = 7; j >= 0; j--) {
             ret.emplace_back(data[i] >> i & 1);
@@ -143,6 +143,26 @@ std::vector<bool> convert_string_to_vector(const std::string &data) {
     return ret;
 }
 
-std::pair<node*, std::string> deserialize_tree(const std::vector<bool>&) {
-    // TODO
+node* recursive_tree_deserialization(const std::vector<bool>& data, int& i) {
+    if (data[i] == 1) {
+        i++;
+        unsigned char c = 0;
+        for (int j = i; j < i + 8; ++j) {
+            c = c << 1 | data[j];
+        }
+        i += 8;
+        return new node(static_cast<char>(c), 0);
+    }
+    else {
+        i++;
+        node* left = recursive_tree_deserialization(data, i);
+        node* right = recursive_tree_deserialization(data, i);
+        return new node(left, right);
+    }
+}
+
+std::pair<node*, std::vector<bool>> deserialize_tree(const std::vector<bool>& data) {
+    int i = 0;
+    node* tree = recursive_tree_deserialization(data, i);
+    return {tree, std::vector<bool>(data.begin() + i, data.end())};
 }

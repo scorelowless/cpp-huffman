@@ -28,7 +28,7 @@ int main(int argc, char** argv){
     else {
         const string content = get_file_content(in_file);
         const vector<bool> code = convert_string_to_vector(content);
-        const pair<node*, string> tree_and_code = deserialize_tree(content);
+        const pair<node*, vector<bool>> tree_and_code = deserialize_tree(code);
     }
     return 0;
 }

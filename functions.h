@@ -21,6 +21,6 @@ std::vector<bool> serialize_tree(const node*);
 std::string concatenate(const std::vector<bool>&, const std::vector<bool>&);
 void save_to_file(const std::string&, const std::string&);
 std::vector<bool> convert_string_to_vector(const std::string&);
-std::pair<node*, std::string> deserialize_tree(const std::vector<bool>&);
+std::pair<node*, std::vector<bool>> deserialize_tree(const std::vector<bool>&);
 
 #endif //CPP_HUFFMAN_FUNCTIONS_H
