@@ -8,10 +8,11 @@ class compressed_string_builder {
 private:
     int ind;
     std::vector<unsigned char> result_string;
+    std::vector<unsigned char> filename;
     std::vector<bool> buffer;
     void reduce();
 public:
-    compressed_string_builder();
+    explicit compressed_string_builder(const std::string&);
     void append(const std::vector<bool>&);
     std::vector<unsigned char> build();
 };

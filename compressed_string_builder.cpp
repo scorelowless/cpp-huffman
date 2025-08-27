@@ -11,8 +11,10 @@ void compressed_string_builder::reduce() {
     }
 }
 
-compressed_string_builder::compressed_string_builder() {
+compressed_string_builder::compressed_string_builder(const std::string& s) {
     ind = 0;
+    filename = std::vector<unsigned char>(s.begin(), s.end());
+    filename.push_back(0);
 }
 
 void compressed_string_builder::append(const std::vector<bool>& add) {
@@ -31,5 +33,6 @@ std::vector<unsigned char> compressed_string_builder::build() {
         result_string.emplace_back(c);
     }
     result_string.insert(result_string.begin(), trailing_zeros);
+    result_string.insert(result_string.begin(), filename.begin(), filename.end());
     return result_string;
 }

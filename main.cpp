@@ -4,9 +4,9 @@
 using namespace std;
 
 int main(int argc, char** argv){
-    string in_file, out_file;
+    string in_file;
     bool compress;
-    if (parse_input(argc, argv, in_file, out_file, compress)) return 1;
+    if (parse_input(argc, argv, in_file, compress)) return 1;
     if (compress) {
         // read the file contents
         const vector<unsigned char> content = get_file_content(in_file);
@@ -24,14 +24,18 @@ int main(int argc, char** argv){
         const vector<bool> encoded_tree = serialize_tree(tree);
         // free up the tree
         remove_tree(tree);
-        // join the encoded contents of the file with encoded tree to form the whole output
-        const vector<unsigned char> out_file_content = concatenate(encoded_data, encoded_tree);
+        // join the encoded contents of the file with encoded tree to form the whole output + filename
+        const vector<unsigned char> out_file_content = concatenate(in_file, encoded_data, encoded_tree);
+        // get the name of the out file
+        string out_filename = get_out_filename(in_file);
         // save the output to the file
-        save_to_file(out_file, out_file_content);
+        save_to_file(out_filename, out_file_content);
     }
     else {
-        // read the file contents
-        const vector<unsigned char> content = get_file_content(in_file);
+        // read the file contents and get the filename
+        vector<unsigned char> content = get_file_content(in_file);
+        // extract the filename
+        const string filename = get_filename(in_file, content);
         // change the format into bit sequence
         const vector<bool> code = convert_unsigned_chars_to_bools(content);
         // divide the bit sequence into the tree part, serializing it, and into the encoded data part
@@ -41,7 +45,7 @@ int main(int argc, char** argv){
         // free up the tree
         remove_tree(tree_and_code.first);
         // save decoded data into the file
-        save_to_file(out_file, data);
+        save_to_file(filename, data);
     }
     return 0;
 }

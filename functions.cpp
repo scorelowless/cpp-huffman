@@ -1,21 +1,23 @@
 #include <fstream>
+#include <filesystem>
 
 #include "compressed_string_builder.h"
 #include "functions.h"
 using namespace std;
 
-int parse_input(int argc, char** argv, string &in_file, string &out_file, bool& compress) {
-    if (argc != 4) return 1;
+int parse_input(int argc, char** argv, string &filename, bool& compress) {
+    if (argc != 3) return 1;
     if (string(argv[1]) != "-c" && string(argv[1]) != "-d") return 1;
-    in_file = argv[2];
-    out_file = argv[3];
+    filename = argv[2];
     compress = string(argv[1]) != "-d";
     return 0;
 }
 
 vector<unsigned char> get_file_content(const string &filename) {
     ifstream file(filename, ios::binary | ios::ate);
+    if (!file) throw std::runtime_error("Cannot open file: " + filename);
     const auto size = file.tellg();
+    if (size < 0) throw std::runtime_error("Failed to get file size: " + filename);
     file.seekg(0);
 
     vector<unsigned char> buffer(size);
@@ -108,16 +110,30 @@ void remove_tree(const node* n) {
 }
 
 
-vector<unsigned char> concatenate(const vector<bool>& data, const vector<bool>& tree) {
-    compressed_string_builder builder;
+vector<unsigned char> concatenate(const string& filename, const vector<bool>& data, const vector<bool>& tree) {
+    compressed_string_builder builder(filesystem::path(filename).filename().string());
     builder.append(tree);
     builder.append(data);
     return builder.build();
 }
 
+string get_out_filename(const string &file) {
+    filesystem::path p(file);
+    return p.replace_extension(".hff");
+}
+
+
 void save_to_file(const string &filename, const vector<unsigned char> &data) {
     ofstream outfile(filename, ios::binary);
     outfile.write(reinterpret_cast<const char*>(data.data()), static_cast<long>(data.size()));
+}
+
+string get_filename(string& file, vector<unsigned char> &data) {
+    const string filename(reinterpret_cast<char*>(data.data()));
+    data.erase(data.begin(), data.begin() + static_cast<long>(filename.size()) + 1);
+    filesystem::path p(file);
+    filesystem::path outfile = p.parent_path() / filename;
+    return outfile.string();
 }
 
 vector<bool> convert_unsigned_chars_to_bools(const vector<unsigned char> &data) {
