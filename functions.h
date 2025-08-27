@@ -11,7 +11,7 @@ std::string get_file_content(const std::string&);
 std::array<int, 256> get_char_frequency(const std::string&);
 std::priority_queue<node*, std::vector<node*>, node_comparator> create_nodes(const std::array<int, 256>&);
 node* create_tree(std::priority_queue<node*, std::vector<node*>, node_comparator>);
-std::array<std::string, 256> create_translation_dictionary(node*);
+std::array<std::string, 256> create_translation_dictionary(const node*);
 std::vector<bool> encode(const std::string&, const std::array<std::string, 256>&);
 std::vector<bool> serialize_tree(const node*);
 void remove_tree(const node*);

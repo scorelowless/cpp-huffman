@@ -56,7 +56,7 @@ void dfs(const node* n, const std::string &sequence, std::array<std::string, 256
     dfs(n->get_right(), sequence + "1", dictionary);
 }
 
-std::array<std::string, 256> create_translation_dictionary(node* tree) {
+std::array<std::string, 256> create_translation_dictionary(const node* tree) {
     std::array<std::string, 256> ret{};
     dfs(tree, "", ret);
     return ret;
