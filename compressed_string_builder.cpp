@@ -1,17 +1,19 @@
 #include "compressed_string_builder.h"
 
 void compressed_string_builder::reduce() {
-    while (buffer.size() >= 8) {
+    while (ind + 8 <= buffer.size()) {
         unsigned char c = 0;
-        for (int i = 0; i < 8; i++) {
+        for (int i = ind; i < ind + 8; i++) {
             c = c << 1 | buffer[i];
         }
-        buffer.erase(buffer.begin(), buffer.begin() + 8);
-        result_string.push_back(static_cast<char>(c));
+        ind += 8;
+        result_string.push_back(c);
     }
 }
 
-compressed_string_builder::compressed_string_builder() = default;
+compressed_string_builder::compressed_string_builder() {
+    ind = 0;
+}
 
 void compressed_string_builder::append(const std::vector<bool>& add) {
     buffer.insert(buffer.end(), add.begin(), add.end());

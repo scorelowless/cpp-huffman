@@ -6,6 +6,7 @@
 
 class compressed_string_builder {
 private:
+    int ind;
     std::vector<unsigned char> result_string;
     std::vector<bool> buffer;
     void reduce();
