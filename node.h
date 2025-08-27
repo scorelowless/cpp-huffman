@@ -16,7 +16,7 @@ public:
     int get_weight() const;
     node* get_left() const;
     node* get_right() const;
-    char get_c() const;
+    unsigned char get_c() const;
 };
 
 

@@ -28,6 +28,6 @@ int node::get_weight() const {
     return this->weight;
 }
 
-char node::get_c() const {
+unsigned char node::get_c() const {
     return this->c;
 }
