@@ -26,12 +26,10 @@ vector<unsigned char> get_file_content(const string &filename) {
 }
 
 void save_empty_to_file(const string &filename) {
-    string data = filesystem::path(filename).filename().string();
-    data += '\0';
-    filesystem::path out(filename);
-    out = out.replace_extension(".hff");
-    ofstream outfile(out, ios::binary);
-    outfile.write(data.data(), static_cast<long>(data.size()));
+    string data_string = filesystem::path(filename).filename().string();
+    vector<unsigned char> data = vector<unsigned char>(data_string.begin(), data_string.end());
+    data.emplace_back(0);
+    save_to_file(get_out_filename(filename), data);
 }
 
 
@@ -137,10 +135,25 @@ string get_out_filename(const string &file) {
     return p.replace_extension(".hff");
 }
 
+string get_unique_out_filename(const string &file) {
+    const filesystem::path p(file);
+    if (!filesystem::exists(p)) return file;
+    const filesystem::path parent(p.parent_path());
+    const string stem = p.stem().string();
+    const string ext = p.extension().string();
+    int counter = 1;
+    filesystem::path final_path;
+    do {
+        final_path = parent / (stem + " (" + to_string(counter) + ')' + ext);
+        counter++;
+    } while (filesystem::exists(final_path));
+    return final_path.string();
+}
 
 void save_to_file(const string &filename, const vector<unsigned char> &data) {
-    ofstream outfile(filename, ios::binary);
-    outfile.write(reinterpret_cast<const char*>(data.data()), static_cast<long>(data.size()));
+    string final_filename = get_unique_out_filename(filename);
+    ofstream outfile(final_filename, ios::binary);
+    outfile.write(reinterpret_cast<const char*>(data.data()), static_cast<streamsize>(data.size()));
 }
 
 string get_filename(string& file, vector<unsigned char> &data) {

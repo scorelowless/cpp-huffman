@@ -60,5 +60,4 @@ int main(int argc, char** argv){
     return 0;
 
     // TODO: exception handling
-    // TODO: avoiding overwriting existing files
 }
