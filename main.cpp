@@ -4,15 +4,15 @@
 using namespace std;
 
 int main(int argc, char** argv){
-    string in_file;
+    string filepath;
     bool compress;
-    if (parse_input(argc, argv, in_file, compress)) return 1;
+    if (parse_input(argc, argv, filepath, compress)) return 1;
     if (compress) {
         // read the file contents
-        const vector<unsigned char> in_file_content = get_file_content(in_file);
+        const vector<unsigned char> in_file_content = get_file_content(filepath);
         // if file is empty, save only the file's filename
         if (in_file_content.empty()) {
-            save_empty_to_file(in_file);
+            save_empty_to_file(filepath);
             return 0;
         }
         // calculate the frequency of each char
@@ -30,20 +30,20 @@ int main(int argc, char** argv){
         // free up the tree
         remove_tree(tree);
         // join the encoded contents of the file with encoded tree to form the whole output + filename
-        const vector<unsigned char> out_file_content = concatenate(in_file, encoded_contents, encoded_tree);
+        const vector<unsigned char> out_file_content = concatenate(filepath, encoded_contents, encoded_tree);
         // get the name of the out file
-        const string out_filename = get_out_filename(in_file);
+        const string out_filename = get_out_filepath(filepath);
         // save the output to the file
         save_to_file(out_filename, out_file_content);
     }
     else {
         // read the file contents and get the filename
-        vector<unsigned char> in_file_content = get_file_content(in_file);
+        vector<unsigned char> in_file_content = get_file_content(filepath);
         // extract the filename
-        const string filename = get_filename(in_file, in_file_content);
+        const string out_filename = get_filename(filepath, in_file_content);
         // if there was only filename - the input file was empty
         if (in_file_content.empty()) {
-            save_to_file(filename, in_file_content);
+            save_to_file(out_filename, in_file_content);
             return 0;
         }
         // change the format into bit sequence
@@ -51,11 +51,11 @@ int main(int argc, char** argv){
         // divide the bit sequence into the tree part, serializing it, and into the encoded data part
         const pair<node*, vector<bool>> tree_and_bitstream = deserialize_tree(bitstream);
         // decode the encoded data according to the tree
-        const vector<unsigned char> data = decode(tree_and_bitstream.first, tree_and_bitstream.second);
+        const vector<unsigned char> out_file_content = decode(tree_and_bitstream.first, tree_and_bitstream.second);
         // free up the tree
         remove_tree(tree_and_bitstream.first);
         // save decoded data into the file
-        save_to_file(filename, data);
+        save_to_file(out_filename, out_file_content);
     }
     return 0;
 

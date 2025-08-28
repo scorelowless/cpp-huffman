@@ -29,7 +29,7 @@ void save_empty_to_file(const string &filename) {
     string data_string = filesystem::path(filename).filename().string();
     vector<unsigned char> data = vector<unsigned char>(data_string.begin(), data_string.end());
     data.emplace_back(0);
-    save_to_file(get_out_filename(filename), data);
+    save_to_file(get_out_filepath(filename), data);
 }
 
 
@@ -130,17 +130,17 @@ vector<unsigned char> concatenate(const string& filename, const vector<bool>& da
     return builder.build();
 }
 
-string get_out_filename(const string &file) {
-    filesystem::path p(file);
+string get_out_filepath(const string &filepath) {
+    filesystem::path p(filepath);
     return p.replace_extension(".hff");
 }
 
-string get_unique_out_filename(const string &file) {
-    const filesystem::path p(file);
-    if (!filesystem::exists(p)) return file;
-    const filesystem::path parent(p.parent_path());
-    const string stem = p.stem().string();
-    const string ext = p.extension().string();
+string get_unique_out_filepath(const string &filepath) {
+    const filesystem::path file(filepath);
+    if (!filesystem::exists(file)) return filepath;
+    const filesystem::path parent(file.parent_path());
+    const string stem = file.stem().string();
+    const string ext = file.extension().string();
     int counter = 1;
     filesystem::path final_path;
     do {
@@ -150,17 +150,17 @@ string get_unique_out_filename(const string &file) {
     return final_path.string();
 }
 
-void save_to_file(const string &filename, const vector<unsigned char> &data) {
-    string final_filename = get_unique_out_filename(filename);
-    ofstream outfile(final_filename, ios::binary);
+void save_to_file(const string &filepath, const vector<unsigned char> &data) {
+    const string final_filepath = get_unique_out_filepath(filepath);
+    ofstream outfile(final_filepath, ios::binary);
     outfile.write(reinterpret_cast<const char*>(data.data()), static_cast<streamsize>(data.size()));
 }
 
-string get_filename(string& file, vector<unsigned char> &data) {
+string get_filename(const string& filepath, vector<unsigned char> &data) {
     const string filename(reinterpret_cast<char*>(data.data()));
     data.erase(data.begin(), data.begin() + static_cast<long>(filename.size()) + 1);
-    filesystem::path p(file);
-    filesystem::path outfile = p.parent_path() / filename;
+    const filesystem::path p(filepath);
+    const filesystem::path outfile = p.parent_path() / filename;
     return outfile.string();
 }
 

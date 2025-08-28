@@ -18,9 +18,9 @@ vector<bool> encode(const vector<unsigned char>&, const array<vector<bool>, 256>
 vector<bool> serialize_tree(const node*);
 void remove_tree(const node*);
 vector<unsigned char> concatenate(const string&, const vector<bool>&, const vector<bool>&);
-string get_out_filename(const string&);
+string get_out_filepath(const string&);
 void save_to_file(const string&, const vector<unsigned char>&);
-string get_filename(string&, vector<unsigned char>&);
+string get_filename(const string&, vector<unsigned char>&);
 vector<bool> convert_unsigned_chars_to_bools(const vector<unsigned char>&);
 pair<node*, vector<bool>> deserialize_tree(const vector<bool>&);
 vector<unsigned char> decode(const node*, const vector<bool>&);
