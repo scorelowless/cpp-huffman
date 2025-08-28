@@ -9,6 +9,7 @@ using namespace std;
 
 int parse_input(int argc, char** argv, string &filename, bool&);
 vector<unsigned char> get_file_content(const string&);
+void save_empty_to_file(const string&);
 array<int, 256> get_char_frequency(const vector<unsigned char>&);
 priority_queue<node*, vector<node*>, node_comparator> create_nodes(const array<int, 256>&);
 node* create_tree(priority_queue<node*, vector<node*>, node_comparator>);

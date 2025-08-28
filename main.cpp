@@ -10,6 +10,11 @@ int main(int argc, char** argv){
     if (compress) {
         // read the file contents
         const vector<unsigned char> in_file_content = get_file_content(in_file);
+        // if file is empty, save only the file's filename
+        if (in_file_content.empty()) {
+            save_empty_to_file(in_file);
+            return 0;
+        }
         // calculate the frequency of each char
         const array<int, 256> char_frequency = get_char_frequency(in_file_content);
         // insert frequencies into priority queue
@@ -36,6 +41,11 @@ int main(int argc, char** argv){
         vector<unsigned char> in_file_content = get_file_content(in_file);
         // extract the filename
         const string filename = get_filename(in_file, in_file_content);
+        // if there was only filename - the input file was empty
+        if (in_file_content.empty()) {
+            save_to_file(filename, in_file_content);
+            return 0;
+        }
         // change the format into bit sequence
         const vector<bool> bitstream = convert_unsigned_chars_to_bools(in_file_content);
         // divide the bit sequence into the tree part, serializing it, and into the encoded data part
@@ -49,7 +59,6 @@ int main(int argc, char** argv){
     }
     return 0;
 
-    // TODO: checks for degenerated trees (empty file, file consisting of only one char)
     // TODO: exception handling
     // TODO: avoiding overwriting existing files
 }

@@ -25,6 +25,16 @@ vector<unsigned char> get_file_content(const string &filename) {
     return buffer;
 }
 
+void save_empty_to_file(const string &filename) {
+    string data = filesystem::path(filename).filename().string();
+    data += '\0';
+    filesystem::path out(filename);
+    out = out.replace_extension(".hff");
+    ofstream outfile(out, ios::binary);
+    outfile.write(data.data(), static_cast<long>(data.size()));
+}
+
+
 array<int, 256> get_char_frequency(const vector<unsigned char>& data) {
     array<int, 256> ret{};
     for (const unsigned char i : data) {
@@ -69,6 +79,11 @@ void dfs(const node* n, const vector<bool> &sequence, array<vector<bool>, 256>& 
 array<vector<bool>, 256> create_translation_dictionary(const node* tree) {
     array<vector<bool>, 256> ret{};
     const vector<bool> seq;
+    // if file has only one unique char
+    if (tree->get_left() == nullptr) {
+        ret[tree->get_c()] = vector<bool>(1, false);
+        return ret;
+    }
     dfs(tree, seq, ret);
     return ret;
 }
@@ -176,6 +191,13 @@ pair<node*, vector<bool>> deserialize_tree(const vector<bool>& data) {
 vector<unsigned char> decode(const node* n, const vector<bool>& data) {
     vector<unsigned char> ret;
     const node* current = n;
+    //if the tree has only one node
+    if (n->get_left() == nullptr) {
+        for (int i = 0; i < data.size(); i++) {
+            ret.emplace_back(n->get_c());
+        }
+        return ret;
+    }
     for (const bool& i : data) {
         if (!i) {
             current = current->get_left();
