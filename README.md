@@ -9,16 +9,16 @@ After compiling the program has two modes:
 
 Above line would create a file `file.hff` in the `/path/to/the/` directory - same path and name but different extension.
 
-> [!Warning]
-> If there already exists `/path/to/the/file.hff` it will be overwritten! In future versions it will be fixed.
+> [!Note]
+> If there already exists `/path/to/the/file.hff`, the program will try to add *(1)*, *(2)*, etc. to the name.
 
 ### Decompression
 `./cpp-huffman -d /path/to/the/file.hff`
 
 Above line would create a file in the `/path/to/the/` directory. The file name and extension will be the same as the original file.
 
-> [!Warning]
-> If there already exists the file that the cpp-huffman would create after decompression it will be overwritten! In the future versions it will be fixed.
+> [!Note]
+> If there already exists the file that the cpp-huffman would create after decompression, the program will try to add *(1)*, *(2)*, etc. to the name, similarly to compression.
 
 ## Disclaimer
 The project is still in the development. The developer doesn't take any accountability for potential loss of data.
